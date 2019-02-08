@@ -33,3 +33,20 @@ class Meal:
 
     def __repr__(self):
         return self.name
+
+    def encode(self):
+        property_dict = {
+            "name": self.name,
+            "difficulty": self.difficulty,
+        }
+
+        return property_dict
+
+    @staticmethod
+    def decode(property_dict):
+        pd = property_dict
+        name = pd["name"]
+        difficulty = pd["difficulty"]
+
+        new_meal = Meal(name, difficulty)
+        return new_meal
