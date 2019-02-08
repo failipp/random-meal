@@ -4,7 +4,7 @@ import random
 from lib import Meal
 
 
-def main():
+if __name__ == "__main__":
     pf = Meal("Pfannkuchen", 2)
     ks = Meal("Kaiserschmarrn", 3)
     sp = Meal("Spaghetti", 1)
@@ -26,7 +26,3 @@ def main():
         ms.append(zu_kochen)
 
         input()
-
-
-if __name__ == "__main__":
-    main()
