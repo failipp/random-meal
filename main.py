@@ -1,28 +1,31 @@
 #! /usr/bin/env python3
 
+import json
 import random
+
 from lib import Meal
 
-
 if __name__ == "__main__":
-    pf = Meal("Pfannkuchen", 2)
-    ks = Meal("Kaiserschmarrn", 3)
-    sp = Meal("Spaghetti", 1)
-    ca = Meal("Canneloni", 4)
-    pi = Meal("Pizza", 2)
-    ka = Meal("Kässpatzen", 4)
-    bu = Meal("Burger", 5)
+    with open("data.json", "r") as f:
+        me = f.read()
 
-    ms = [pf, ks, sp, ca, pi, ka, bu]
+    data = json.loads(me)
+    ms = [Meal.decode(x) for x in data]
+
     random.shuffle(ms)
+    print(ms)
 
-    while True:
-        grenze = len(ms) // 2
-        rint = random.randint(0, grenze)
+    try:
+        while True:
+            grenze = len(ms) // 2
+            rint = random.randint(0, grenze)
 
-        zu_kochen = ms.pop(rint)
+            zu_kochen = ms.pop(rint)
 
-        print(zu_kochen)
-        ms.append(zu_kochen)
+            print(zu_kochen)
+            ms.append(zu_kochen)
+            print(ms, end="")
 
-        input()
+            input()
+    except KeyboardInterrupt:
+        print("Loop End")
