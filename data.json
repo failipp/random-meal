@@ -1,38 +1,51 @@
-[
-    {
-        "name": "Burger",
-        "difficulty": 5
-    },
-    {
-        "name": "Canneloni",
-        "difficulty": 4
-    },
-    {
-        "name": "Kaiserschmarrn",
-        "difficulty": 3
-    },
-    {
-        "name": "Kässpatzen",
-        "difficulty": 4
-    },
-    {
-        "name": "Pfannkuchen",
-        "difficulty": 2
-    },
-    {
-        "name": "Pizza",
-        "difficulty": 2
-    },
-    {
-        "name": "Spaghetti",
-        "difficulty": 1
-    },
-    {
-        "name": "Salat",
-        "difficulty": 1
-    },
-    {
-        "name": "Waffeln",
-        "difficulty": 2
-    }
-]
+{
+    "meals": [
+        {
+            "name": "Burger",
+            "difficulty": 5
+        },
+        {
+            "name": "Canneloni",
+            "difficulty": 4
+        },
+        {
+            "name": "Kaiserschmarrn",
+            "difficulty": 3
+        },
+        {
+            "name": "Kässpatzen",
+            "difficulty": 4
+        },
+        {
+            "name": "Pfannkuchen",
+            "difficulty": 2
+        },
+        {
+            "name": "Pizza",
+            "difficulty": 2
+        },
+        {
+            "name": "Salat",
+            "difficulty": 1
+        },
+        {
+            "name": "Spaghetti",
+            "difficulty": 1
+        },
+        {
+            "name": "Waffeln",
+            "difficulty": 2
+        }
+    ],
+    "last_time_eaten": [
+        "Waffeln",
+        "Kässpatzen",
+        "Pizza",
+        "Canneloni",
+        "Burger",
+        "Spaghetti",
+        "Pfannkuchen",
+        "Salat",
+        "Kaiserschmarrn"
+    ]
+}

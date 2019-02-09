@@ -3,16 +3,18 @@
 import json
 import random
 
-from lib import Meal
+from lib import Meal, Mealhandler
 
 if __name__ == "__main__":
     with open("data.json", "r") as f:
         me = f.read()
 
+    print(me)
     data = json.loads(me)
-    ms = [Meal.decode(x) for x in data]
+    mH = Mealhandler(data)
+    # ms = [Meal.decode(x) for x in data]
+    ms = mH._meals
 
-    random.shuffle(ms)
     print(ms)
 
     try:
@@ -29,3 +31,10 @@ if __name__ == "__main__":
             input()
     except KeyboardInterrupt:
         print("Loop End")
+
+    to_write = json.dumps(mH.export(),
+                          ensure_ascii=False,
+                          indent=4)
+
+    with open("data.json", "w") as f:
+        f.write(to_write)
