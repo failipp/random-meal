@@ -31,7 +31,15 @@ class Mealhandler:
         for key in kwargs:
             print(f"{hasattr(Meal, key)}")
             if hasattr(Meal, key):
+                if isinstance(kwargs[key], list):
+                    multi_filters = [m for m in filtered_meals if getattr(m, key) in kwargs[key]]
+                else:
+                    multi_filters = None
+
                 filtered_meals = [m for m in filtered_meals if getattr(m, key) == kwargs[key]]
+
+                if multi_filters is not None:
+                    filtered_meals.extend(multi_filters)
 
         return filtered_meals
 
@@ -64,7 +72,7 @@ class Mealhandler:
     def export(self):
         data_dict = {
             "meals":
-            sorted([m.encode() for m in self._meals], key=lambda x: x["name"]),
+                sorted([m.encode() for m in self._meals], key=lambda x: x["name"]),
             "last_time_eaten": [m.name for m in self._meals]
         }
 
