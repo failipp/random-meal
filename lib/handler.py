@@ -26,7 +26,17 @@ class Mealhandler:
     def meals(self):
         return self._meals
 
+    def filter(self, **kwargs):
+        filtered_meals = self.meals[:]
+        for key in kwargs:
+            print(f"{hasattr(Meal, key)}")
+            if hasattr(Meal, key):
+                filtered_meals = [m for m in filtered_meals if getattr(m, key) == kwargs[key]]
+
+        return filtered_meals
+
     def _sort_meals(self, last_time_eaten):
+        # TODO: remove type checking?
         if not isinstance(last_time_eaten, list):
             raise TypeError("last_time_eaten must be list")
 
