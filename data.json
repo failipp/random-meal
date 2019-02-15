@@ -2,50 +2,59 @@
     "meals": [
         {
             "name": "Burger",
-            "difficulty": 5
+            "difficulty": 5,
+            "ingredients": ["Quinoa", "Tomate"]
         },
         {
             "name": "Canneloni",
-            "difficulty": 4
+            "difficulty": 4,
+            "ingredients": ["Canneloni", "Spinat", "Mozzarella"]
         },
         {
             "name": "Kaiserschmarrn",
-            "difficulty": 3
+            "difficulty": 3,
+            "ingredients": ["Mehl", "Eier"]
         },
         {
             "name": "Kässpatzen",
-            "difficulty": 4
+            "difficulty": 4,
+            "ingredients": ["Mehl", "Käse", "Zwiebeln"]
         },
         {
             "name": "Pfannkuchen",
-            "difficulty": 2
+            "difficulty": 2,
+            "ingredients": ["Mehl", "Eier", "Milch"]
         },
         {
             "name": "Pizza",
-            "difficulty": 2
+            "difficulty": 2,
+            "ingredients": ["Hefe", "Käse", "Tomatensoße"]
         },
         {
             "name": "Salat",
-            "difficulty": 1
+            "difficulty": 1,
+            "ingredients": ["Salat"]
         },
         {
             "name": "Spaghetti",
-            "difficulty": 1
+            "difficulty": 1,
+            "ingredients": ["Spaghetti", "Tomatensoße", "Käse"]
         },
         {
             "name": "Waffeln",
-            "difficulty": 2
+            "difficulty": 2,
+            "ingredients": ["Mehl"]
         }
     ],
     "last_time_eaten": [
-        "Waffeln",
-        "Kässpatzen",
         "Pizza",
+        "Kaiserschmarrn",
+        "Kässpatzen",
         "Canneloni",
-        "Burger",
-        "Spaghetti",
         "Pfannkuchen",
         "Salat",
-        "Kaiserschmarrn"
+        "Burger",
+        "Waffeln",
+        "Spaghetti"
     ]
 }

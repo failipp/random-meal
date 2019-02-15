@@ -2,9 +2,10 @@
 
 
 class Meal:
-    def __init__(self, name, difficulty):
+    def __init__(self, name, difficulty, ingredients=[]):
         self.name = name
         self.difficulty = difficulty
+        self._ingredients = ingredients
 
     @property
     def name(self):
@@ -31,6 +32,13 @@ class Meal:
             raise ValueError("difficulty should be from 1 to 5")
         self._difficulty = d
 
+    @property
+    def ingredients(self):
+        return self._ingredients
+
+    def __str__(self):
+        return f"{self.name}: difficulty {self.difficulty}, ingredients {self.ingredients}"
+
     def __repr__(self):
         return self.name
 
@@ -38,6 +46,7 @@ class Meal:
         property_dict = {
             "name": self.name,
             "difficulty": self.difficulty,
+            "ingredients": self.ingredients,
         }
 
         return property_dict
@@ -47,6 +56,8 @@ class Meal:
         pd = property_dict
         name = pd["name"]
         difficulty = pd["difficulty"]
+        ingredients = pd['ingredients'] if 'ingredients' in pd else []
 
-        new_meal = Meal(name, difficulty)
+        new_meal = Meal(name, difficulty, ingredients)
+
         return new_meal
