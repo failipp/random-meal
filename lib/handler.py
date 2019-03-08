@@ -1,4 +1,4 @@
-#! /usr/bin/env pyhton3
+#! /usr/bin/env python3
 
 from lib.meal import Meal
 
@@ -11,7 +11,7 @@ class Mealhandler:
             if "meals" not in data_dict:
                 raise KeyError("data_dict needs key 'meals'")
 
-            # TODO check for correct type of keys "meals" and "last_time_eaten"
+            # TODO check for correct type of keys "meals" and "last_time_eaten" or not?
             self._meals = [Meal.decode(m) for m in data_dict["meals"]]
 
             if "last_time_eaten" in data_dict:
@@ -31,6 +31,7 @@ class Mealhandler:
         for key in kwargs:
             print(f"{hasattr(Meal, key)}")
             if hasattr(Meal, key):
+                # TODO: Add searching for one keyword in attribute that is list
                 if isinstance(kwargs[key], list):
                     multi_filters = [m for m in filtered_meals if getattr(m, key) in kwargs[key]]
                 else:
