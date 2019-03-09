@@ -2,8 +2,11 @@
 
 import json
 import random
+from flask import Flask
 
 from lib import Meal, Mealhandler
+
+app = Flask(__name__)
 
 if __name__ == "__main__":
     with open("data.json", "r") as f:
