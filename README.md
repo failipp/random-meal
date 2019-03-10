@@ -21,3 +21,7 @@ but only from the ones you did not eat in the recent past.
 - GUI through which it is also possible to edit the database
 - Not only be able to randomly "eat" a meal, but to search for a specific one,
   so that it will move to the back in the database
+
+## Used software
+
+- [flask](https://github.com/pallets/flask/), a micro-webframework for python. Copyright © 2010 by the Pallets team.
