@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8">
+    <title>Choose meal</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/mainpage.css') }}" />
+  </head>
+  <body>
+    <header>
+      <h1>random-meal generator</h1>
+    </header>
+      <nav>
+        <ul>
+          <li><a href="{{ url_for('index') }}">Home</a></li>
+          <li><a class="active" href="{{ url_for('startpage') }}">Start</a></li>
+        </ul>
+      </nav>
+
+    <main>
+        {% for index, meal in meals %}
+            <form action="/eat_meal/{{ index }}/" method="post">
+            <button class="meal" name="submitBtn" onclick="submit">{{ meal }}</button>
+            </form>
+        {% endfor %}
+    </main>
+    <footer>
+    </footer>
+  </body>
+</html>
