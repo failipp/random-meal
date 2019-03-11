@@ -80,11 +80,11 @@
         "Burger",
         "Waffeln",
         "Pfannkuchen",
-        "Kaiserschmarrn",
         "Canneloni",
         "Kässpatzen",
         "Spaghetti",
         "Pizza",
-        "Salat"
+        "Salat",
+        "Kaiserschmarrn"
     ]
 }
