@@ -18,8 +18,9 @@
 
     <main>
         {% for index, meal in meals %}
-            <form action="/eat_meal/{{ index }}/" method="post">
-            <button class="meal" name="submitBtn" onclick="submit">{{ meal }}</button>
+            <form action="/eat_meal" method="post">
+                <input type="hidden" name="meal_id" value="{{ index }}"/>
+                <button class="meal" name="submitBtn" onclick="submit">{{ meal }}</button>
             </form>
         {% endfor %}
     </main>

@@ -2,7 +2,7 @@
 
 import json
 import random
-from flask import Flask, redirect, render_template, url_for
+from flask import Flask, redirect, render_template, url_for, request
 
 from lib import Meal, Mealhandler
 
@@ -25,9 +25,10 @@ def startpage():
     return render_template('main.html', meals=res)
 
 
-@app.route("/eat_meal/<int:meal>/", methods=["post"])
-def eat_meal(meal):
+@app.route("/eat_meal", methods=["post"])
+def eat_meal():
     global ms
+    meal = int(request.form['meal_id'])
     eaten = ms.pop(meal)
     ms.append(eaten)
     return redirect(url_for('startpage'))
