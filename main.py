@@ -1,11 +1,8 @@
 #! /usr/bin/env python3
 
-import json
 import random
 from flask import Flask, redirect, render_template, url_for
 from pymongo import MongoClient
-
-from lib import Meal, Mealhandler
 
 app = Flask(__name__)
 database = MongoClient()["random_meal_generator"]
@@ -25,7 +22,6 @@ def startpage():
     ml = ms[:grenze]
     print(ml)
     random.shuffle(ml)
-    res = ml[:3]
     meals = [
         (ml[0], MEALS.find_one({"_id": ml[0]})["name"]),
         (ml[1], MEALS.find_one({"_id": ml[1]})["name"]),
@@ -44,14 +40,4 @@ def eat_meal(meal):
 
 
 if __name__ == '__main__':
-    # global ms
-    # with open("data.json", "r") as f:
-    #     me = f.read()
-    #
-    # print(me)
-    # data = json.loads(me)
-    # mH = Mealhandler(data)
-    # # ms = [Meal.decode(x) for x in data]
-    # ms = mH._meals
-
     app.run(debug=True)
