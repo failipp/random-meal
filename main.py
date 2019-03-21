@@ -1,7 +1,9 @@
 #! /usr/bin/env python3
 
 import random
+from datetime import datetime
 
+from bson import ObjectId
 from flask import Flask, redirect, render_template, request, url_for
 from pymongo import MongoClient
 from bson.objectid import ObjectId
@@ -9,7 +11,6 @@ from bson.objectid import ObjectId
 app = Flask(__name__)
 database = MongoClient()["random_meal_generator"]
 MEALS = database["meals"]
-MEAL_SEQUENCE = database["meal_sequence"]
 
 
 @app.route("/")
@@ -19,16 +20,16 @@ def index():
 
 @app.route("/chose_meal")
 def startpage():
-    ms = MEAL_SEQUENCE.find_one({"_id": 0})["meal_sequence"]
-    grenze = len(ms) // 2
-    ml = ms[:grenze]
-    print(ml)
+    # All meals in mongodb sorted regarding to datetime in last_time_eaten
+    list_of_meals = sorted(MEALS.find(), key=lambda x: x['last_time_eaten'])
+    grenze = len(list_of_meals) // 2
+    ml = list_of_meals[:grenze]
+    print([x['name'] for x in ml])
     random.shuffle(ml)
-    meals = [
-        (ml[0], MEALS.find_one({"_id": ml[0]})["name"]),
-        (ml[1], MEALS.find_one({"_id": ml[1]})["name"]),
-        (ml[2], MEALS.find_one({"_id": ml[2]})["name"]),
-    ]
+    meals = [(str(meal['_id']), meal['name']) for meal in ml]
+    if len(meals) > 3:
+        meals = meals[:3]
+
     return render_template('main.html', meals=meals)
 
 
@@ -36,10 +37,7 @@ def startpage():
 def eat_meal():
     meal = request.form['meal_id']
     print(f"This is the meal: {meal}")
-    ms = MEAL_SEQUENCE.find_one({"_id": 0})["meal_sequence"]
-    eaten = ms.pop(ms.index(meal))
-    ms.append(eaten)
-    MEAL_SEQUENCE.update_one({"_id": 0}, {"$set": {"meal_sequence": ms}})
+    MEALS.update_one({'_id': ObjectId(meal)}, {'$set': {'last_time_eaten': datetime.now().isoformat()}})
     return redirect(url_for('startpage'))
 
 
