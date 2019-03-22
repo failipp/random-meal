@@ -3,10 +3,9 @@
 import random
 from datetime import datetime
 
-from bson import ObjectId
+from bson.objectid import ObjectId
 from flask import Flask, redirect, render_template, request, url_for
 from pymongo import MongoClient
-from bson.objectid import ObjectId
 
 app = Flask(__name__)
 database = MongoClient()["random_meal_generator"]
@@ -20,7 +19,7 @@ def index():
 
 @app.route("/chose_meal")
 def startpage():
-    # All meals in mongodb sorted regarding to datetime in last_time_eaten
+    # Sorted meals in mongodb (key: datetime in last_time_eaten)
     list_of_meals = sorted(MEALS.find(), key=lambda x: x['last_time_eaten'])
     grenze = len(list_of_meals) // 2
     ml = list_of_meals[:grenze]
@@ -43,13 +42,34 @@ def eat_meal():
 
 @app.route("/all_meals")
 def all_meals():
-    allmeals = [(x['_id'], x) for x in sorted(MEALS.find(), key=lambda x: x['name'])]
+    allmeals = [(str(x['_id']), x) for x in sorted(MEALS.find(), key=lambda x: x['name'])]
     return render_template("all-meals.html", allmeals=allmeals)
 
 
 @app.route("/edit_meal", methods=['post'])
 def edit_meal():
-    pass
+    meal_id = request.form['meal_id']
+    if meal_id == "0":
+        meal_id = str(ObjectId())
+    meal = MEALS.find_one({'_id': ObjectId(meal_id)})
+    if meal is None:
+        return render_template("edit-meal.html", meal_id=meal_id, meal={})
+    ingredients = ", ".join(meal['ingredients'])
+    return render_template("edit-meal.html", meal_id=meal_id, meal=meal, ingredients=ingredients)
+
+
+@app.route("/update_meal", methods=["post"])
+def update_meal():
+    meal_id = request.form['meal_id']
+    meal_name = request.form['meal_name']
+    meal_difficulty = int(request.form['meal_difficulty'])
+    meal_ingredients = request.form['meal_ingredients'].split(", ")
+    MEALS.update_one({'_id': ObjectId(meal_id)},
+                     {'$set': {'name': meal_name, 'difficulty': meal_difficulty, 'ingredients': meal_ingredients},
+                      "$setOnInsert": {"last_time_eaten": datetime.now().isoformat()}},
+                     upsert=True)
+
+    return redirect(url_for('all_meals'))
 
 
 if __name__ == '__main__':
