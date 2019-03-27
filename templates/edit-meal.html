@@ -18,12 +18,12 @@
 </nav>
 
 <main>
-    <div class="meal-list">
+    <div class="meal-editing">
         <form action="{{ url_for('update_meal') }}" method="post">
-            <input type="hidden" name="meal_id" value="{{ meal_id }}"/>
-            <input type="text" name="meal_name" value="{{ meal['name'] }}"/>
-            <input type="number" name="meal_difficulty" value="{{ meal['difficulty']}}" min="1" max="5"/>
-            <input type="text" name="meal_ingredients" value="{{ ingredients }}"/>
+            <input type="hidden" name="meal_id" value="{{ meal_id }}"/><br>
+            <input type="text" name="meal_name" value="{{ meal['name'] }}"/><br>
+            <input type="number" name="meal_difficulty" value="{{ meal['difficulty']}}" min="1" max="5"/><br>
+            <input type="text" name="meal_ingredients" value="{{ ingredients }}"/><br>
             <input type="submit" value="Update"/>
             <input type="reset" value="Reset"/>
         </form>

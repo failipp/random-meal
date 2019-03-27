@@ -66,3 +66,18 @@ button.meal:hover {
     color: #fff;
     background-color: #2011a7;
 }
+div.meal-editing input {
+    display: inline-block;
+    margin: 5px;
+    width: 20%;
+    color: black;
+    background-color: #92ca8a
+}
+
+div.meal-editing input[type="submit"] {
+    width: 5%;
+}
+
+div.meal-editing input[type="reset"] {
+    width: 5%;
+}
