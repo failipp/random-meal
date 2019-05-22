@@ -60,14 +60,24 @@ def edit_meal():
 
 @app.route("/update_meal", methods=["post"])
 def update_meal():
+    # TODO: Properties to add to a meal:
+    #  - Additional information (textbox) DONE
+    #  - Rating
+    #  - Category / Tags (e.g. vegetarian, dessert, warm/cold, italian, ...)
+    # TODO: Further properties?
+    #  - Ingredients: Include in tags? Amount of ingredient? Manage in seperate collection?
     meal_id = request.form['meal_id']
     meal_name = request.form['meal_name']
     meal_difficulty = int(request.form['meal_difficulty'])
     meal_ingredients = request.form['meal_ingredients'].split(", ")
+    meal_info = request.form['meal_info']
     MEALS.update_one({'_id': ObjectId(meal_id)},
-                     {'$set': {'name': meal_name, 'difficulty': meal_difficulty, 'ingredients': meal_ingredients},
+                     {'$set': {'name': meal_name, 'difficulty': meal_difficulty, 'ingredients': meal_ingredients,
+                               'additional_info': meal_info},
                       "$setOnInsert": {"last_time_eaten": datetime.now().isoformat()}},
                      upsert=True)
+    if meal_info == "":
+        MEALS.update_one({'_id': ObjectId(meal_id)}, {'$unset': {'additional_info': 1}})
 
     return redirect(url_for('all_meals'))
 

@@ -24,6 +24,7 @@
             <input type="text" name="meal_name" value="{{ meal['name'] }}" required/><br>
             <input type="number" name="meal_difficulty" value="{{ meal['difficulty']}}" min="1" max="5" required/><br>
             <input type="text" name="meal_ingredients" value="{{ ingredients }}" required/><br>
+            <textarea name="meal_info">{{ meal['additional_info'] }}</textarea><br>
             <input type="submit" value="Update"/>
             <input type="reset" value="Reset"/>
         </form>
