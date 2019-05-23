@@ -9,26 +9,79 @@
 <header>
     <h1>random-meal generator</h1>
 </header>
-<nav>
-    <ul>
-        <li><a href="{{ url_for('index') }}">Home</a></li>
-        <li><a href="{{ url_for('startpage') }}">Start</a></li>
-        <li><a class="active" href="{{ url_for('all_meals') }}">Manage</a></li>
-    </ul>
-</nav>
 
 <main>
-    <div class="meal-list">
-        {% for index, meal in allmeals %}
-            <form action="/edit_meal" method="post">
-                <input type="hidden" name="meal_id" value="{{ index }}"/>
-                <button class="meal" name="submitBtn" onclick="submit">{{ meal['name'] }}</button>
+    <div class="nav-bar">
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('index') }}">Home</a></li>
+                <li><a href="{{ url_for('startpage') }}">Start</a></li>
+                <li><a class="active" href="{{ url_for('all_meals') }}">Manage</a></li>
+            </ul>
+        </nav>
+    </div>
+    <div class="main-container">
+        <div class="meal-list">
+            {% for index, meal in allmeals %}
+                <form action="{{ url_for('edit_meal') }}" method="post">
+                    <input type="hidden" name="meal_id" value="{{ index }}"/>
+                    <button class="meal {{ 'clicked' if meal_id == index }}" name="submitBtn" onclick="submit">{{ meal['name'] }}</button>
+                </form>
+            {% endfor %}
+            <form action="{{ url_for('edit_meal') }}" method="post">
+                <input type="hidden" name="meal_id" value="0"/>
+                <button class="meal" style="margin-bottom: 0;" name="submitBtn" onclick="submit">New Meal</button>
             </form>
-        {% endfor %}
-        <form action="/edit_meal" method="post">
-            <input type="hidden" name="meal_id" value="0"/>
-            <button class="meal" name="submitBtn" onclick="submit">New Meal</button>
-        </form>
+        </div>
+        <div class="meal-edit-display">
+            {% if meal is defined %}
+                <div class="meal-editing">
+                    <form class="full" autocomplete="off" action="{{ url_for('update_meal') }}" method="post">
+                        <input type="hidden" name="meal_id" value="{{ meal_id }}"/>
+                        <table>
+                            <tr>
+                                <td>Name:</td>
+                                <td><input type="text" name="meal_name" value="{{ meal['name'] }}" required/></td>
+                            </tr>
+                            <tr>
+                                <td>Aufwand:</td>
+                                <td><input type="number" name="meal_difficulty" value="{{ meal['difficulty'] }}" min="1"
+                                           max="5"
+                                           required/></td>
+                            </tr>
+                        </table>
+                        <input type="text" name="meal_ingredients" value="{{ ingredients }}" required/><br>
+                        <textarea class="input" name="meal_info">{{ meal['additional_info'] }}</textarea><br>
+                        <select name="diet" class="input" required>
+                            {% if meal['diet'] is not defined %}
+                                <option value="" selected disabled>Bitte auswählen</option>
+                            {% endif %}
+                            <option {{ 'selected' if meal['diet'] == 0 }} value="0">mit Fleisch</option>
+                            <option {{ 'selected' if meal['diet'] == 1 }} value="1">vegetarisch</option>
+                            <option {{ 'selected' if meal['diet'] == 2 }} value="2">vegan</option>
+                        </select>
+                        <select name="temperature" class="input" required>
+                            {% if meal['temperature'] is not defined %}
+                                <option value="" selected disabled>Bitte auswählen</option>
+                            {% endif %}
+                            <option {{ 'selected' if meal['temperature'] == 0 }} value="0">schnell zubereiten / kalt</option>
+                            <option {{ 'selected' if meal['temperature'] == 1 }} value="1">kochen / warm</option>
+                            <option {{ 'selected' if meal['temperature'] == 2 }} value="2">wartezeit nach zubereitung (abkühlen/durchziehen)</option>
+                        </select>
+                        <select name="type" class="input" required>
+                            {% if meal['type'] is not defined %}
+                                <option value="" selected disabled>Bitte auswählen</option>
+                            {% endif %}
+                            <option {{ 'selected' if meal['type'] == 0 }} value="0">Hauptspeise</option>
+                            <option {{ 'selected' if meal['type'] == 1 }} value="1">Beilage</option>
+                            <option {{ 'selected' if meal['type'] == 2 }} value="2">Nachspeise/Süß</option>
+                        </select><br>
+                        <input type="submit" value="Update"/>
+                        <input type="reset" value="Reset"/>
+                    </form>
+                </div>
+            {% endif %}
+        </div>
     </div>
 </main>
 <footer>

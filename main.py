@@ -12,6 +12,8 @@ database = MongoClient()["random_meal_generator"]
 MEALS = database["meals"]
 
 
+# TODO logik auslagern
+
 @app.route("/")
 def index():
     return render_template("index.html")
@@ -40,7 +42,7 @@ def eat_meal():
     return redirect(url_for('startpage'))
 
 
-@app.route("/all_meals")
+@app.route("/all_meals", methods=['get', 'post'])
 def all_meals():
     allmeals = [(str(x['_id']), x) for x in sorted(MEALS.find(), key=lambda x: x['name'])]
     return render_template("all-meals.html", allmeals=allmeals)
@@ -52,22 +54,42 @@ def edit_meal():
     if meal_id == "0":
         meal_id = str(ObjectId())
     meal = MEALS.find_one({'_id': ObjectId(meal_id)})
+    allmeals = [(str(x['_id']), x) for x in sorted(MEALS.find(), key=lambda x: x['name'])]
     if meal is None:
-        return render_template("edit-meal.html", meal_id=meal_id, meal={})
+        return render_template("all-meals.html", allmeals=allmeals, meal_id=meal_id, meal={})
     ingredients = ", ".join(meal['ingredients'])
-    return render_template("edit-meal.html", meal_id=meal_id, meal=meal, ingredients=ingredients)
+
+    return render_template("all-meals.html", allmeals=allmeals, meal_id=meal_id, meal=meal, ingredients=ingredients)
 
 
 @app.route("/update_meal", methods=["post"])
 def update_meal():
+    # TODO: Properties to add to a meal:
+    #  - Category / Tags (e.g. vegetarian, dessert, warm/cold, italian, ...)
+    # TODO: Further properties?
+    #  - Ingredients: Include in tags? Amount of ingredient? Manage in separate collection?
+    # TODO Delete Button
+
     meal_id = request.form['meal_id']
     meal_name = request.form['meal_name']
     meal_difficulty = int(request.form['meal_difficulty'])
-    meal_ingredients = request.form['meal_ingredients'].split(", ")
+
+    meal_ingredients = request.form['meal_ingredients'].split(", ")  # TODO delete this
+
+    meal_info = request.form['meal_info']
+
+    meal_diet = int(request.form['diet'])
+    meal_temperature = int(request.form['temperature'])
+    meal_type = int(request.form['type'])
+
     MEALS.update_one({'_id': ObjectId(meal_id)},
-                     {'$set': {'name': meal_name, 'difficulty': meal_difficulty, 'ingredients': meal_ingredients},
+                     {'$set': {'name': meal_name, 'difficulty': meal_difficulty, 'ingredients': meal_ingredients,
+                               'additional_info': meal_info, 'diet': meal_diet, 'temperature': meal_temperature,
+                               'type': meal_type},
                       "$setOnInsert": {"last_time_eaten": datetime.now().isoformat()}},
                      upsert=True)
+    if meal_info == "":
+        MEALS.update_one({'_id': ObjectId(meal_id)}, {'$unset': {'additional_info': 1}})
 
     return redirect(url_for('all_meals'))
 

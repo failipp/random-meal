@@ -9,17 +9,23 @@
 <header>
     <h1>random-meal generator</h1>
 </header>
-<nav>
-    <ul>
-        <li><a class="active" href="{{ url_for('index') }}">Home</a></li>
-        <li><a href="{{ url_for('startpage') }}">Start</a></li>
-        <li><a href="{{ url_for('all_meals') }}">Manage</a></li>
-    </ul>
-</nav>
+
 
 <main>
-    <h2>Welcome!</h2>
-    <a href="{{ url_for('startpage') }}">Chose your meal!</a>
+    <div class="nav-bar">
+        <nav>
+            <ul>
+                <li><a class="active" href="{{ url_for('index') }}">Home</a></li>
+                <li><a href="{{ url_for('startpage') }}">Start</a></li>
+                <li><a href="{{ url_for('all_meals') }}">Manage</a></li>
+            </ul>
+        </nav>
+    </div>
+    <div>
+        <h2>Welcome!</h2>
+        <a href="{{ url_for('startpage') }}">Chose your meal!</a>
+    </div>
+
 </main>
 <footer>
 </footer>

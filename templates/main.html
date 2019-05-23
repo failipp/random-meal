@@ -9,21 +9,29 @@
 <header>
     <h1>random-meal generator</h1>
 </header>
-<nav>
-    <ul>
-        <li><a href="{{ url_for('index') }}">Home</a></li>
-        <li><a class="active" href="{{ url_for('startpage') }}">Start</a></li>
-        <li><a href="{{ url_for('all_meals') }}">Manage</a></li>
-    </ul>
-</nav>
+
 
 <main>
-    {% for index, meal in meals %}
-    <form action="/eat_meal" method="post">
-        <input type="hidden" name="meal_id" value="{{ index }}"/>
-        <button class="meal" name="submitBtn" onclick="submit">{{ meal }}</button>
-    </form>
-    {% endfor %}
+    <div class="nav-bar">
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('index') }}">Home</a></li>
+                <li><a class="active" href="{{ url_for('startpage') }}">Start</a></li>
+                <li><a href="{{ url_for('all_meals') }}">Manage</a></li>
+            </ul>
+        </nav>
+    </div>
+    <div class="main-container">
+        <div class="meal-list">
+            {% for index, meal in meals %}
+            <form action="{{ url_for('eat_meal') }}" method="post">
+                <input type="hidden" name="meal_id" value="{{ index }}"/>
+                <button class="meal" name="submitBtn" onclick="submit">{{ meal }}</button>
+            </form>
+            {% endfor %}
+        </div>
+    </div>
+
 </main>
 <footer>
 </footer>

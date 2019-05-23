@@ -19,11 +19,21 @@
 
 <main>
     <div class="meal-editing">
-        <form action="{{ url_for('update_meal') }}" method="post">
+        <form autocomplete="off" action="{{ url_for('update_meal') }}" method="post">
             <input type="hidden" name="meal_id" value="{{ meal_id }}"/><br>
             <input type="text" name="meal_name" value="{{ meal['name'] }}" required/><br>
             <input type="number" name="meal_difficulty" value="{{ meal['difficulty']}}" min="1" max="5" required/><br>
             <input type="text" name="meal_ingredients" value="{{ ingredients }}" required/><br>
+            <textarea name="meal_info">{{ meal['additional_info'] }}</textarea><br>
+            <select name="diet">
+                <option value="meat">Mit Fleisch</option>
+                <option value="vegetarian">Vegetarisch</option>
+                <option value="vegan">Vegan</option>
+            </select>
+            <select>
+                <option>Warm</option>
+                <option>Kalt</option>
+            </select>
             <input type="submit" value="Update"/>
             <input type="reset" value="Reset"/>
         </form>
