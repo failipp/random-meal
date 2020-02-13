@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="de">
+<head>
+    <meta charset="utf-8">
+    <title>rmg welcome</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/mainpage.css') }}"/>
+</head>
+<body>
+<header>
+    <h1>random-meal generator</h1>
+</header>
+
+
+<main>
+    <div class="nav-bar">
+        <nav>
+            <ul>
+                <li><a class="active" href="{{ url_for('index') }}">Home</a></li>
+                <li><a href="{{ url_for('startpage') }}">Start</a></li>
+                <li><a href="{{ url_for('all_meals') }}">Manage</a></li>
+            </ul>
+        </nav>
+    </div>
+    <div>
+        <h2>Welcome!</h2>
+        <a href="{{ url_for('startpage') }}">Chose your meal!</a>
+    </div>
+
+</main>
+<footer>
+</footer>
+</body>
+</html>

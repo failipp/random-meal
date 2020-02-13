@@ -1,40 +1,98 @@
 #! /usr/bin/env python3
 
-import json
 import random
+from datetime import datetime
 
-from lib import Meal, Mealhandler
+from bson.objectid import ObjectId
+from flask import Flask, redirect, render_template, request, url_for
+from pymongo import MongoClient
 
-if __name__ == "__main__":
-    with open("data.json", "r") as f:
-        me = f.read()
+app = Flask(__name__)
+database = MongoClient()["random_meal_generator"]
+MEALS = database["meals"]
 
-    print(me)
-    data = json.loads(me)
-    mH = Mealhandler(data)
-    # ms = [Meal.decode(x) for x in data]
-    ms = mH._meals
 
-    print(ms)
+# TODO logik auslagern
 
-    try:
-        while True:
-            grenze = len(ms) // 2
-            rint = random.randint(0, grenze)
+@app.route("/")
+def index():
+    return render_template("index.html")
 
-            zu_kochen = ms.pop(rint)
 
-            print(zu_kochen)
-            ms.append(zu_kochen)
-            print(ms, end="")
+@app.route("/chose_meal")
+def startpage():
+    # Sorted meals in mongodb (key: datetime in last_time_eaten)
+    list_of_meals = sorted(MEALS.find(), key=lambda x: x['last_time_eaten'])
+    grenze = len(list_of_meals) // 2
+    ml = list_of_meals[:grenze]
+    print([x['name'] for x in ml])
+    random.shuffle(ml)
+    meals = [(str(meal['_id']), meal['name']) for meal in ml]
+    if len(meals) > 3:
+        meals = meals[:3]
 
-            input()
-    except KeyboardInterrupt:
-        print("Loop End")
+    return render_template('main.html', meals=meals)
 
-    to_write = json.dumps(mH.export(),
-                          ensure_ascii=False,
-                          indent=4)
 
-    with open("data.json", "w") as f:
-        f.write(to_write)
+@app.route("/eat_meal", methods=["post"])
+def eat_meal():
+    meal = request.form['meal_id']
+    print(f"This is the meal: {meal}")
+    MEALS.update_one({'_id': ObjectId(meal)}, {'$set': {'last_time_eaten': datetime.now().isoformat()}})
+    return redirect(url_for('startpage'))
+
+
+@app.route("/all_meals", methods=['get', 'post'])
+def all_meals():
+    allmeals = [(str(x['_id']), x) for x in sorted(MEALS.find(), key=lambda x: x['name'])]
+    return render_template("all-meals.html", allmeals=allmeals)
+
+
+@app.route("/edit_meal", methods=['post'])
+def edit_meal():
+    meal_id = request.form['meal_id']
+    if meal_id == "0":
+        meal_id = str(ObjectId())
+    meal = MEALS.find_one({'_id': ObjectId(meal_id)})
+    allmeals = [(str(x['_id']), x) for x in sorted(MEALS.find(), key=lambda x: x['name'])]
+    if meal is None:
+        return render_template("all-meals.html", allmeals=allmeals, meal_id=meal_id, meal={})
+    ingredients = ", ".join(meal['ingredients'])
+
+    return render_template("all-meals.html", allmeals=allmeals, meal_id=meal_id, meal=meal, ingredients=ingredients)
+
+
+@app.route("/update_meal", methods=["post"])
+def update_meal():
+    # TODO: Properties to add to a meal:
+    #  - Category / Tags (e.g. vegetarian, dessert, warm/cold, italian, ...)
+    # TODO: Further properties?
+    #  - Ingredients: Include in tags? Amount of ingredient? Manage in separate collection?
+    # TODO Delete Button
+
+    meal_id = request.form['meal_id']
+    meal_name = request.form['meal_name']
+    meal_difficulty = int(request.form['meal_difficulty'])
+
+    meal_ingredients = request.form['meal_ingredients'].split(", ")  # TODO delete this
+
+    meal_info = request.form['meal_info']
+
+    meal_diet = int(request.form['diet'])
+    meal_temperature = int(request.form['temperature'])
+    meal_type = int(request.form['type'])
+
+    MEALS.update_one({'_id': ObjectId(meal_id)},
+                     {'$set': {'name': meal_name, 'difficulty': meal_difficulty, 'ingredients': meal_ingredients,
+                               'additional_info': meal_info, 'diet': meal_diet, 'temperature': meal_temperature,
+                               'type': meal_type},
+                      "$setOnInsert": {"last_time_eaten": datetime.now().isoformat()}},
+                     upsert=True)
+    if meal_info == "":
+        MEALS.update_one({'_id': ObjectId(meal_id)}, {'$unset': {'additional_info': 1}})
+
+    return redirect(url_for('all_meals'))
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
